@@ -54,7 +54,7 @@ log = logging.getLogger("sloptotal")
 async def lifespan(app: FastAPI):
     """Application lifespan handler for startup and shutdown."""
     print(format_banner(_hw, _profile, _config))
-    log.info(f"Starting SlopTotal (profile={_profile}, device={get_device()})...")
+    log.info(f"Starting Quillmark (profile={_profile}, device={get_device()})...")
     await init_database()
     purged = await purge_invalid_cached_reports()
     if purged:
@@ -77,17 +77,17 @@ async def lifespan(app: FastAPI):
     await queue_manager.start()
     app.state.queue_manager = queue_manager
 
-    log.info("SlopTotal started")
+    log.info("Quillmark started")
     yield
-    log.info("Shutting down SlopTotal...")
+    log.info("Shutting down Quillmark...")
     retention_task.cancel()
     await queue_manager.stop()
     shutdown_analyzer()
-    log.info("SlopTotal shutdown complete")
+    log.info("Quillmark shutdown complete")
 
 
 app = FastAPI(
-    title="SlopTotal",
+    title="Quillmark",
     description="VirusTotal for AI slop detection",
     lifespan=lifespan,
 )

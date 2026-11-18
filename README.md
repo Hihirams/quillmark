@@ -1,3 +1,8 @@
+> **Quillmark** is a fork of [SlopTotal](https://github.com/pablocaeg/sloptotal) (MIT).
+> The detector, its calibration and every benchmark figure are upstream's work and are
+> unchanged here; this fork adds Windows launchers, an icon and its own name.
+> See [FORK.md](FORK.md) for exactly what changed.
+
 <p align="center">
   <a href="https://sloptotal.com"><img src="docs/assets/banner.jpg" alt="SlopTotal: open-source AI text detector that runs 23 detection engines on your own hardware" width="100%"></a>
 </p>
@@ -14,7 +19,7 @@
 
 <p align="center"><b>English</b> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.ru.md">Русский</a> · <a href="README.es.md">Español</a></p>
 
-# SlopTotal
+# Quillmark
 
 **VirusTotal for AI-generated text.** Paste text, drop in a PDF or Word file, or
 give it a URL. Twenty-three independent AI detectors (neural classifiers,

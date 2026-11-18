@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}SlopTotal{% endblock %}</title>
+    <title>{% block title %}Quillmark{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}Self-hosted AI text detector. {{ engine_count }} open detection engines run on this server; nothing is sent to third parties.{% endblock %}">
     <meta name="theme-color" content="#f3efe6" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#171512" media="(prefers-color-scheme: dark)">
@@ -19,14 +19,14 @@
 <body class="st-root">
     <header class="st-header">
         <div class="st-header__inner">
-            <a href="/" class="st-logo" aria-label="SlopTotal home">
+            <a href="/" class="st-logo" aria-label="Quillmark home">
                 <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect class="st-logo__tile" width="32" height="32" rx="7"/><g transform="translate(16 18.2) scale(1.16) translate(-16 -18.6)"><path class="st-logo__clean" d="M5.5 22.5A10.5 10.5 0 0 1 16 12" fill="none" stroke-opacity=".55" stroke-width="4.6" stroke-linecap="round"/><path class="st-logo__slop" d="M16 12A10.5 10.5 0 0 1 26.5 22.5" fill="none" stroke-width="4.6" stroke-linecap="round"/><path class="st-logo__needle" d="M15 24L22 15" stroke-width="3.2" stroke-linecap="round"/></g></svg>
-                <span class="st-logo__word">SlopTotal</span>
+                <span class="st-logo__word">Quillmark</span>
             </a>
             <nav class="st-header__nav" aria-label="Main">
                 <a href="/"{% if request.url.path == "/" %} aria-current="page"{% endif %}>Detector</a>
                 <a href="/docs">API</a>
-                <a href="https://github.com/pablocaeg/sloptotal" class="hide-sm">GitHub</a>
+                <a href="https://github.com/Hihirams/quillmark" class="hide-sm">GitHub</a>
             </nav>
         </div>
     </header>
@@ -35,8 +35,8 @@
     </main>
     <footer class="st-footer">
         <div class="footer-line">
-            <span>Self-hosted SlopTotal. Every engine runs on this server; no text is sent to third parties.</span>
-            <span><a href="https://github.com/pablocaeg/sloptotal">Source</a> · MIT licence</span>
+            <span>Quillmark is a self-hosted fork of <a href="https://github.com/pablocaeg/sloptotal">SlopTotal</a>. Every engine runs on this server; no text is sent to third parties.</span>
+            <span><a href="https://github.com/Hihirams/quillmark">Source</a> · MIT licence</span>
         </div>
     </footer>
     {% block scripts %}{% endblock %}

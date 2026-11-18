@@ -180,7 +180,7 @@ def format_banner(hw: dict, profile: str, config: dict) -> str:
     lines = [
         "",
         "  ┌─────────────────────────────────────────────┐",
-        "  │          SlopTotal — Self-Hosted             │",
+        "  │          Quillmark — Self-Hosted             │",
         "  └─────────────────────────────────────────────┘",
         "",
         "  Hardware:",
@@ -215,7 +215,7 @@ def format_banner(hw: dict, profile: str, config: dict) -> str:
             "  API:        http://localhost:8000/api/quick-score",
             "",
             "  Useful? A star helps others find it:",
-            "  https://github.com/pablocaeg/sloptotal",
+            "  https://github.com/Hihirams/quillmark",
             "",
         ]
     )

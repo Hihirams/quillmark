@@ -87,7 +87,7 @@ def test_rejects_empty_request(client, path):
 def test_home_page_renders(client):
     r = client.get("/")
     assert r.status_code == 200
-    assert "SlopTotal" in r.text
+    assert "Quillmark" in r.text
 
 
 def test_form_rejects_short_text(client):
