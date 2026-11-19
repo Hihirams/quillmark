@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Style coach: Quillmark{% endblock %}
+{% block content %}
+<div class="band home-band">
+<section class="measure home-hero">
+    <h1 class="display">Style coach</h1>
+    <p class="home-hero__lead">
+        Paste a text and get the patterns that make prose read as machine-made, each one with its span and a
+        suggested edit. Every change is yours to accept: the coach never rewrites on its own, and it never
+        touches citations, quotes, numbers or URLs.
+    </p>
+</section>
+
+<div class="measure">
+    <div id="coach-notice" class="tool-notice" role="alert" hidden>
+        <div class="st-notice st-notice--warn">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M10 9v4.5M10 6.25v.01"/></svg>
+            <div id="coach-notice-text"></div>
+        </div>
+    </div>
+
+    <div class="st-tool">
+        <div class="st-tool__body">
+            <label for="coach-input" class="sr-only">Text to review</label>
+            <textarea id="coach-input" class="st-textarea" rows="10" placeholder="Paste the text you want to review"></textarea>
+            <div class="st-tool__bar">
+                <span class="st-tool__meta" id="coach-meta" aria-live="polite">0 words</span>
+                <div class="tool-actions">
+                    <button type="button" class="st-btn st-btn--secondary" id="coach-score">Score it</button>
+                    <button type="button" class="st-btn st-btn--primary" id="coach-run">Find patterns</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="st-panel" id="coach-result" aria-live="polite" hidden>
+        <p class="site-result__host" id="coach-summary"></p>
+        <div id="coach-findings"></div>
+        <div class="tool-actions" id="coach-actions" hidden>
+            <button type="button" class="st-btn st-btn--secondary" id="coach-copy">Copy edited text</button>
+            <button type="button" class="st-btn st-btn--primary" id="coach-rescore">Score the edited text</button>
+        </div>
+        <p class="site-result__note">
+            The score is a signal, not proof of authorship. Editing makes the writing better; it does not
+            guarantee what any detector will say, and it is not a substitute for writing the text yourself.
+        </p>
+    </section>
+
+    <section class="st-panel" id="coach-score-result" aria-live="polite" hidden>
+        <h2 class="site-result__verdict" id="coach-score-verdict"></h2>
+        <p class="site-result__text" id="coach-score-detail"></p>
+    </section>
+</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/static/js/coach.js" defer></script>
+{% endblock %}

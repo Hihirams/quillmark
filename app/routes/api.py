@@ -21,7 +21,9 @@ from app.analyzer import (
     quick_analyze_text,
     scan_snippets_batch,
 )
-from app.config import MIN_TEXT_LENGTH
+from app.coach import analyse as coach_analyse
+from app.coach import apply_findings as coach_apply
+from app.config import MAX_ANALYSED_CHARS, MIN_TEXT_LENGTH
 from app.database import (
     FeedbackNotReady,
     get_scan_stats,
@@ -34,6 +36,7 @@ from app.page_classifier import classify_page_type
 from app.schemas import (
     AnalyzeRequest,
     BatchUrlRequest,
+    CoachApplyRequest,
     FeedbackRequest,
     SiteScanRequest,
     SnippetBatchRequest,
@@ -657,3 +660,42 @@ async def api_scan_stats():
 async def api_engines():
     """Return metadata for all detection engines."""
     return get_engine_list_rich()
+
+
+@router.post(
+    "/coach",
+    tags=["Style coach"],
+    summary="Diagnose machine-made style patterns and suggest surgical edits",
+)
+async def api_coach(req: AnalyzeRequest):
+    """Find the patterns our evaluation showed to move the calibrated score.
+
+    Deterministic, local and read-only: the endpoint never rewrites the text and
+    never touches citations, quotes, numbers or URLs. Each finding carries a span,
+    a suggestion and, when a plain replacement is safe, the replacement itself.
+    """
+    text = (req.text or "").strip()
+    if len(text) < MIN_TEXT_LENGTH:
+        raise HTTPException(
+            status_code=422,
+            detail=f"Paste at least {MIN_TEXT_LENGTH} characters so the patterns are meaningful.",
+        )
+    return coach_analyse(text)
+
+
+@router.post(
+    "/coach/apply",
+    tags=["Style coach"],
+    summary="Apply mechanical style edits, skipping anything protected",
+)
+async def api_coach_apply(req: CoachApplyRequest):
+    """Apply the edits the client accepted, from the end backwards.
+
+    Protected spans (citations, quotes, URLs) are refused here too, so a client
+    bug cannot overwrite a citation.
+    """
+    if len(req.text) > MAX_ANALYSED_CHARS:
+        raise HTTPException(status_code=413, detail="Text too long")
+    edits = [edit.model_dump() for edit in req.edits]
+    result = coach_apply(req.text, edits)
+    return {"text": result, "applied": len(edits), "chars": len(result)}

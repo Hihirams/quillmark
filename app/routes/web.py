@@ -99,6 +99,16 @@ async def index(request: Request):
     return _index(request)
 
 
+@router.get("/coach", response_class=HTMLResponse)
+async def coach_page(request: Request):
+    """Style coach: diagnose the patterns that make prose read as machine-made."""
+    return request.app.state.templates.TemplateResponse(
+        request,
+        "coach.html",
+        {"bands": BANDS, "band_info": BAND_INFO},
+    )
+
+
 @router.post("/analyze")
 async def analyze_form(
     request: Request, url: str = Form(default=""), text: str = Form(default="")

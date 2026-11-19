@@ -230,3 +230,25 @@ class UrlScanRequest(BaseModel):
             ]
         }
     }
+
+
+class CoachEdit(BaseModel):
+    start: int
+    end: int
+    replacement: str = ""
+
+
+class CoachApplyRequest(BaseModel):
+    text: str
+    edits: list[CoachEdit] = []
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "text": "Por otra parte, en el ambito de la educacion el alumnado aprende.",
+                    "edits": [{"start": 0, "end": 15, "replacement": ""}],
+                }
+            ]
+        }
+    }

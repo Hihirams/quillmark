@@ -25,6 +25,7 @@
             </a>
             <nav class="st-header__nav" aria-label="Main">
                 <a href="/"{% if request.url.path == "/" %} aria-current="page"{% endif %}>Detector</a>
+                <a href="/coach"{% if request.url.path == "/coach" %} aria-current="page"{% endif %}>Style coach</a>
                 <a href="/docs">API</a>
                 <a href="https://github.com/Hihirams/quillmark" class="hide-sm">GitHub</a>
             </nav>
