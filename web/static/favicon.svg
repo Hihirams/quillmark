@@ -1,17 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="SlopTotal">
-  <!-- The score dial: clean half, slop half in the red pen, needle reading into the red.
-       Ink tile on light tab bars, paper tile on dark ones. Scaled up and lifted so the
-       dial is optically centred; checked at 16 px (no pivot dot: it merges with the needle). -->
-  <style>
-    .tile { fill: #1a1814; } .clean { stroke: #f3efe6; stroke-opacity: .5; } .needle { stroke: #f3efe6; }
-    @media (prefers-color-scheme: dark) {
-      .tile { fill: #f3efe6; } .clean { stroke: #1a1814; stroke-opacity: .35; } .needle { stroke: #1a1814; }
-    }
-  </style>
-  <rect class="tile" width="32" height="32" rx="7"/>
-  <g transform="translate(16 18.2) scale(1.16) translate(-16 -18.6)">
-    <path class="clean" d="M5.5 22.5A10.5 10.5 0 0 1 16 12" fill="none" stroke-width="4.4" stroke-linecap="round"/>
-    <path d="M16 12A10.5 10.5 0 0 1 26.5 22.5" fill="none" stroke="#e0533b" stroke-width="4.4" stroke-linecap="round"/>
-    <path class="needle" d="M15 24L22 15" stroke-width="3.2" stroke-linecap="round"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+  <rect width="40" height="40" rx="11" fill="#3e2865"/>
+  <path d="M28 10c-7.8.6-14.3 5.4-14.3 11.8 0 3.9 2.9 6.6 6.5 6.6 5.4 0 8.7-4.6 8.7-10.3V10Z" fill="none" stroke="#fff8ea" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M12 31 25.7 16.5M20 23h7.1M22.9 20v-5.3" fill="none" stroke="#dfbdff" stroke-width="1.9" stroke-linecap="round"/>
 </svg>

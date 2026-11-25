@@ -1,4 +1,4 @@
-/* SlopTotal design tokens (light, dark, spacing, type). Kept in step with sloptotal.com. */
+/* Shared layout, type, and verdict color tokens. */
 :root, [data-theme="light"] {
   --bg: #f3efe6;
   --surface: #ebe5d8;

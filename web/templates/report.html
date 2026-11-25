@@ -6,6 +6,7 @@
     <div class="measure">
         <div class="report-head">
             <div>
+                <p class="qm-eyebrow report-head__kicker">Quillmark &nbsp;/&nbsp; Analysis record</p>
                 <h1>Report</h1>
                 <p class="report-status" aria-live="polite">
                     <span class="report-status__dot is-live" id="status-dot" aria-hidden="true"></span>
@@ -15,7 +16,7 @@
             </div>
             <div class="report-head__actions">
                 <button type="button" class="st-btn st-btn--secondary" id="copy-btn">Copy link</button>
-                <a class="st-btn st-btn--ghost" href="/api/report/{{ report.id }}" download="sloptotal-{{ report.id }}.json">Download JSON</a>
+                <a class="st-btn st-btn--ghost" href="/api/report/{{ report.id }}" download="quillmark-{{ report.id }}.json">Download JSON</a>
                 <a href="/" class="st-btn st-btn--primary">New scan</a>
             </div>
         </div>
@@ -79,7 +80,6 @@
             <button type="button" class="st-btn st-btn--secondary" data-label="unsure" aria-pressed="false">Not sure</button>
         </div>
         <p class="feedback__body" id="feedback-status" aria-live="polite"></p>
-        <p class="feedback__star">Free and open source. <a href="https://github.com/Hihirams/quillmark" target="_blank" rel="noopener"><span aria-hidden="true">★</span> Star Quillmark on GitHub</a> &middot; based on <a href="https://github.com/pablocaeg/sloptotal" target="_blank" rel="noopener">SlopTotal</a></p>
     </section>
 
     {% if report.source_type == "url" %}

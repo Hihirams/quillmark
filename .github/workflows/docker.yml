@@ -30,15 +30,15 @@ jobs:
           file: docker/Dockerfile
           push: false
           load: true
-          tags: sloptotal:pr
+          tags: quillmark:pr
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Start the image and wait for /health
         run: |
-          docker run -d --name sloptotal -p 8000:8000 sloptotal:pr
+          docker run -d --name quillmark -p 8000:8000 quillmark:pr
           for i in $(seq 1 60); do
             if curl -fsS http://localhost:8000/health; then exit 0; fi
             sleep 2
           done
-          docker logs sloptotal
+          docker logs quillmark
           exit 1

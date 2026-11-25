@@ -1,6 +1,6 @@
 name: Deploy Backend
 
-# Publishes ghcr.io/pablocaeg/sloptotal. `latest` follows master; publishing a
+# Publishes the image to this repository's GHCR namespace. `latest` follows master; publishing a
 # GitHub release also pushes its semver tags (1.1.0, 1.1) so users can pin one.
 on:
   push:

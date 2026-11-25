@@ -110,7 +110,12 @@ def test_plain_text():
         ("a.exe", b"MZ" * 100, "Supported files"),
         ("a.pdf", b"not a pdf at all", "Could not read"),
         ("a.txt", b"too short", "No readable text"),
-        ("a.txt", b"x" * (10 * 1024 * 1024 + 1), "larger than 10 MB"),
+        pytest.param(
+            "a.txt",
+            b"x" * (10 * 1024 * 1024 + 1),
+            "larger than 10 MB",
+            id="oversized-text",
+        ),
     ],
 )
 def test_rejections(name, data, msg):

@@ -1,13 +1,19 @@
 {% extends "base.html" %}
 {% block title %}Quillmark: AI text detector{% endblock %}
 {% block content %}
-<div class="band home-band">
-<section class="measure home-hero">
-    <h1 class="display">Is this text written by AI?</h1>
-    <p class="home-hero__lead">{{ engines|length }} open AI detectors read your text. You get one calibrated score and every engine's vote.</p>
+<div class="band qm-workspace">
+<div class="qm-workspace__inner">
+<section class="qm-intro">
+    <p class="qm-eyebrow">Quillmark &nbsp;/&nbsp; Writing lab</p>
+    <h1>Read between the lines.</h1>
+    <p class="qm-intro__lead">Look for AI-writing patterns in a draft, document or web page. Quillmark gives you an overall score and shows what each engine found.</p>
+    <div class="qm-notebook">
+        <p><strong>Evidence, not a verdict.</strong> A detector cannot prove who wrote something. Read the signals alongside the original text.</p>
+        <p>Looking to revise? <a href="/coach">Open the style coach</a>.</p>
+    </div>
 </section>
 
-<div class="measure">
+<div class="qm-editor">
     <div id="tool-notice" class="tool-notice" role="alert"{% if not error %} hidden{% endif %}>
         <div class="st-notice st-notice--warn">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M10 9v4.5M10 6.25v.01"/></svg>
@@ -71,7 +77,7 @@
             </div>
         </form>
     </div>
-    <p class="home-privacy">Every engine runs on this server. Your text is not sent to OpenAI or any other API.</p>
+    <p class="qm-local">Every engine runs on this server. The analysis does not send your text to external AI APIs.</p>
 
     <section class="st-panel site-result" id="site-result" aria-live="polite" hidden>
         <p class="site-result__host" id="site-result-host"></p>
@@ -81,6 +87,7 @@
         <button type="button" class="st-btn st-btn--secondary" id="site-result-full" hidden>Run the full {{ engines|length }}-engine report on this page</button>
         <p class="site-result__note">Evidence, not a probability: finding no marker does not mean the site was built by hand.</p>
     </section>
+</div>
 </div>
 </div>
 
@@ -95,7 +102,7 @@
 </div>
 
 <section class="measure section" aria-labelledby="how-heading">
-    <div class="section-head"><h2 id="how-heading">How it works</h2></div>
+    <p class="qm-eyebrow qm-section-index">01 / Method</p><div class="section-head"><h2 id="how-heading">How it works</h2></div>
     <div class="home-how">
         <div>
             <h3>{{ engines|length }} engines read the text</h3>
@@ -114,7 +121,7 @@
 
 <section class="measure section" aria-labelledby="score-heading">
     <div class="section-head">
-        <h2 id="score-heading">Reading the score</h2>
+        <p class="qm-eyebrow qm-section-index">02 / Interpretation</p><h2 id="score-heading">Reading the score</h2>
         <p>The bands are placed by how often human-written text reaches them, so a high score is rare for a person's writing.</p>
     </div>
     <ul class="bands" role="list">
@@ -133,7 +140,7 @@
 
 <section class="measure section" aria-labelledby="engines-heading">
     <div class="section-head">
-        <h2 id="engines-heading">The engines</h2>
+        <p class="qm-eyebrow qm-section-index">03 / Breakdown</p><h2 id="engines-heading">The engines</h2>
         <p>Each engine uses a different method. Some carry weight in the score, all are shown in every report.</p>
     </div>
     <div class="st-panel st-panel--flush">

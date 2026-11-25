@@ -1,42 +1,19 @@
-> **Quillmark** is a fork of [SlopTotal](https://github.com/pablocaeg/sloptotal) (MIT).
-> The detector, its calibration and every benchmark figure are upstream's work and are
-> unchanged here; this fork adds Windows launchers, an icon and its own name.
-> See [FORK.md](FORK.md) for exactly what changed.
-
 <p align="center">
-  <a href="https://sloptotal.com"><img src="docs/assets/banner.jpg" alt="SlopTotal: open-source AI text detector that runs 23 detection engines on your own hardware" width="100%"></a>
+  <img src="docs/assets/quillmark-banner.svg" alt="Quillmark: Read between the lines" width="100%">
 </p>
 
-<p align="center">
-  <a href="https://github.com/pablocaeg/sloptotal/actions/workflows/ci.yml?query=branch%3Amaster"><img src="https://img.shields.io/github/actions/workflow/status/pablocaeg/sloptotal/ci.yml?branch=master&event=push&label=CI" alt="CI status"></a>
-  <a href="https://github.com/pablocaeg/sloptotal/releases"><img src="https://img.shields.io/github/v/release/pablocaeg/sloptotal?color=b5282e" alt="Latest release"></a>
-  <a href="https://github.com/pablocaeg/sloptotal/pkgs/container/sloptotal"><img src="https://img.shields.io/badge/docker-ghcr.io-1a1a18?logo=docker&logoColor=white" alt="Docker image"></a>
-  <img src="https://img.shields.io/badge/python-3.10%2B-3d3b37" alt="Python 3.10+">
-  <a href="https://github.com/pablocaeg/sloptotal/stargazers"><img src="https://img.shields.io/github/stars/pablocaeg/sloptotal?style=flat&color=e3b341&logo=github" alt="GitHub stars"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2d8a4e" alt="MIT license"></a>
-  <a href="https://sloptotal.com"><img src="https://img.shields.io/badge/live%20demo-sloptotal.com-b5282e" alt="Live demo"></a>
-</p>
-
-<p align="center"><b>English</b> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.ru.md">Русский</a> · <a href="README.es.md">Español</a></p>
+[Espa&ntilde;ol](README.es.md) &middot; [中文](README.zh-CN.md) &middot; [Русский](README.ru.md)
 
 # Quillmark
 
-**VirusTotal for AI-generated text.** Paste text, drop in a PDF or Word file, or
-give it a URL. Twenty-three independent AI detectors (neural classifiers,
-statistical tests and linguistic heuristics) score it in parallel, and a
-calibrated ensemble turns their votes into one verdict you can inspect engine by
-engine. It runs on your own CPU, so nothing you scan leaves your machine.
+**A writing lab for reading evidence, not making accusations.** Paste a draft,
+open a PDF or Word document, or enter a public URL. Inspect the overall score
+and individual signals, and use the style coach to review possible edits.
 
-It is a free, self-hosted, open-source alternative to hosted AI content
-detectors such as GPTZero, Originality.ai, Copyleaks, ZeroGPT and Humalingo.
-Instead of one number from one model, it shows you every model's opinion, and
-it publishes how accurate that is, failures included.
+Quillmark is Hiram G.'s independently maintained edition. Analysis runs on your
+own server without sending your text to third-party AI APIs. See [credits and
+provenance](CREDITS.md) for the upstream detector and published research.
 
-<p align="center">
-  <img src="docs/assets/demo.gif" alt="Trying the sample text on sloptotal.com: the calibrated score, the verdict band and every engine’s vote" width="820">
-</p>
-
-**Try it:** [sloptotal.com](https://sloptotal.com) · **Run it:** `docker run -p 8000:8000 ghcr.io/pablocaeg/sloptotal`
 
 ## Features
 
@@ -49,17 +26,16 @@ it publishes how accurate that is, failures included.
   Lovable, v0, Bolt, Base44, Replit, Same and Emergent leave in the sites they deploy,
   and shows the evidence for each one. [How it works](#site-check-detect-sites-built-with-ai-app-builders)
 - **Per-paragraph heat map** through the API, to see which parts read as AI.
-- **Measured, not claimed.** Every accuracy number below comes with the corpus,
+- **Measured, not claimed.** The inherited accuracy measurements below come with the corpus,
   the harness and the raw per-sample scores.
 - **Private by default.** Self-hosted, no third-party AI APIs, no tracking,
   reports deleted after 30 days.
 - **CPU-only is fine.** Auto-detects your hardware; a GPU is optional. Loaded
   models need about 8.3 GB of RAM (an estimate; see
   [docs/MODELS.md](docs/MODELS.md)).
-- **JSON API and a [Chrome extension](https://github.com/pablocaeg/sloptotal-extension)**
-  that marks AI-looking results in Google Search and LinkedIn.
+- **JSON API.** Integrate the same local engine with your own tools.
 
-## Measured accuracy
+## Upstream measured accuracy
 
 Most detectors publish an accuracy figure without saying what it was measured
 on. SlopTotal is measured on [SlopBench](tests/eval/slopbench/): 1,626 human
@@ -96,40 +72,47 @@ classifiers which top the RAID benchmark drop to AUC 0.75 on current models.
 
 ## Quick start
 
-### Docker (fastest)
+### Windows
 
-```bash
-docker run -p 8000:8000 -v sloptotal-models:/app/models ghcr.io/pablocaeg/sloptotal
+From the root of your Quillmark checkout, run in PowerShell:
+
+```powershell
+py -3.12 -m venv venv
+.\venv\Scripts\python.exe -m pip install -r requirements.txt
+.\start-local.ps1 -Profile lite -Open
 ```
 
-Open <http://localhost:8000>. The first scan downloads about 9 GB of models
-(see [docs/MODELS.md](docs/MODELS.md)) into the `sloptotal-models` volume, so
-later starts are quick. To build from source instead, run
-`docker compose -f docker/docker-compose.yml up`.
+Open <http://localhost:8000> if you do not use `-Open`. The launcher binds to
+this machine by default. Do not expose it to a shared network unless you have
+reviewed access and report privacy.
 
-### From source
+### Docker
 
-Requires **Python 3.10+** (macOS ships 3.9, which is too old).
+Build the Quillmark image from this checkout:
 
 ```bash
-git clone https://github.com/pablocaeg/sloptotal.git
-cd sloptotal
+docker compose -f docker/docker-compose.yml up --build
+```
+
+The first run can download about 9 GB of models; check
+[docs/MODELS.md](docs/MODELS.md) for model sizes and memory estimates.
+
+### From source on Linux or macOS
+
+```bash
+git clone https://github.com/Hihirams/quillmark.git
+cd quillmark
 python3.11 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-./scripts/start.sh    # or: uvicorn app.main:app --port 8000
+uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-Check that every engine loads and scores, end to end:
+The existing environment-variable prefix and model cache name are retained for
+compatibility with deployed installations. Check every engine against a running
+server with `python scripts/smoke_test.py`.
 
-```bash
-python scripts/smoke_test.py          # against http://localhost:8000
-```
 
 ## Site check: detect sites built with AI app builders
-
-<p align="center">
-  <img src="docs/assets/site-check.jpg" alt="SlopTotal’s website builder check identifying a site built with Lovable from its hosting, badge and scripts" width="760">
-</p>
 
 "Is this website vibe-coded?" checkers mostly score style (Tailwind class
 counts, missing security headers, buzzwords) and turn it into a percentage.
@@ -355,7 +338,7 @@ performance profile sets all four classifier pools above to `2` when RAM is at l
 ## FAQ
 
 **Can AI detectors be trusted?** Not blindly. No detector, this one included,
-should be the only evidence for an accusation. That is why SlopTotal shows
+should be the only evidence for an accusation. That is why Quillmark shows
 all 23 votes, how much they agree, and its measured false-positive rate. Short
 text (under about 80 words) and heavily edited AI text are unreliable for every
 detector.
@@ -431,16 +414,10 @@ The roadmap is in [TODO.md](docs/TODO.md).
 
 ## Contributing
 
-Contributions are welcome, especially new engines with measurements. Start with
-[CONTRIBUTING.md](.github/CONTRIBUTING.md).
-
-- [Good first issues](https://github.com/pablocaeg/sloptotal/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22): small tasks that name the files to change
-- [Report a bug](https://github.com/pablocaeg/sloptotal/issues/new?template=bug_report.yml)
-- [Request a feature](https://github.com/pablocaeg/sloptotal/issues/new?template=feature_request.yml)
-- [Propose a new engine](https://github.com/pablocaeg/sloptotal/issues/new?template=new_engine.yml)
-- [Ask a question or share results](https://github.com/pablocaeg/sloptotal/discussions)
-
-If SlopTotal is useful to you, a star helps other people find it.
+Use the [Quillmark repository](https://github.com/Hihirams/quillmark) for changes
+to this edition. Include which application screen or workflow you tested. Changes
+to the detector or calibration should include reproducible measurements, not only
+an isolated example. See [the evaluation harness](tests/eval/FINDINGS.md).
 
 ## License
 

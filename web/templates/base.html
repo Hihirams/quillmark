@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Quillmark{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}Self-hosted AI text detector. {{ engine_count }} open detection engines run on this server; nothing is sent to third parties.{% endblock %}">
-    <meta name="theme-color" content="#f3efe6" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#171512" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f7f4ec" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#171322" media="(prefers-color-scheme: dark)">
     <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
     <meta name="robots" content="noindex">
     <link rel="preload" href="/static/fonts/ibm-plex-sans.woff2" as="font" type="font/woff2" crossorigin>
@@ -15,12 +15,14 @@
     <link rel="stylesheet" href="/static/css/tokens.css">
     <link rel="stylesheet" href="/static/css/system.css">
     <link rel="stylesheet" href="/static/css/app.css">
+    <link rel="stylesheet" href="/static/css/quillmark.css">
 </head>
 <body class="st-root">
+    <a class="qm-skip" href="#main-content">Skip to content</a>
     <header class="st-header">
         <div class="st-header__inner">
             <a href="/" class="st-logo" aria-label="Quillmark home">
-                <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect class="st-logo__tile" width="32" height="32" rx="7"/><g transform="translate(16 18.2) scale(1.16) translate(-16 -18.6)"><path class="st-logo__clean" d="M5.5 22.5A10.5 10.5 0 0 1 16 12" fill="none" stroke-opacity=".55" stroke-width="4.6" stroke-linecap="round"/><path class="st-logo__slop" d="M16 12A10.5 10.5 0 0 1 26.5 22.5" fill="none" stroke-width="4.6" stroke-linecap="round"/><path class="st-logo__needle" d="M15 24L22 15" stroke-width="3.2" stroke-linecap="round"/></g></svg>
+                <img src="/static/favicon.svg" alt="" width="40" height="40">
                 <span class="st-logo__word">Quillmark</span>
             </a>
             <nav class="st-header__nav" aria-label="Main">
@@ -31,13 +33,13 @@
             </nav>
         </div>
     </header>
-    <main>
+    <main id="main-content" tabindex="-1">
         {% block content %}{% endblock %}
     </main>
     <footer class="st-footer">
         <div class="footer-line">
-            <span>Quillmark is a self-hosted fork of <a href="https://github.com/pablocaeg/sloptotal">SlopTotal</a>. Every engine runs on this server; no text is sent to third parties.</span>
-            <span><a href="https://github.com/Hihirams/quillmark">Source</a> · MIT licence</span>
+            <span><strong>Quillmark</strong> <span class="qm-edition">&middot; Hiram G. edition</span></span>
+            <span>Self-hosted &middot; <a href="https://github.com/Hihirams/quillmark">Source</a> &middot; <a href="https://github.com/Hihirams/quillmark/blob/master/CREDITS.md">Open-source credits</a></span>
         </div>
     </footer>
     {% block scripts %}{% endblock %}

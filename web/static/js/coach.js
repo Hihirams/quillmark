@@ -185,7 +185,7 @@
       var previous = state.scores.length ? state.scores[state.scores.length - 1] : null;
       state.scores.push(report.overall_score);
       scoreResult.hidden = false;
-      scoreVerdict.textContent = report.overall_score + " · " + report.overall_verdict;
+      scoreVerdict.textContent = report.overall_score + " · " + (report.overall_verdict === "Slop detected" ? "Very strong AI signals" : report.overall_verdict);
       var engines = report.engine_results
         .filter(function (engine) { return engine.score >= 0.7; })
         .sort(function (a, b) { return b.score - a.score; })

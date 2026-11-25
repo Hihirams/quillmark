@@ -49,7 +49,7 @@ BAND_INFO = [
     },
     {
         "key": "slop",
-        "label": "Slop detected",
+        "label": "Very strong AI signals",
         "desc": "Broad agreement across the engines: clear statistical and linguistic markers of unedited AI output.",
     },
 ]

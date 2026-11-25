@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="290" viewBox="0 0 1080 290" role="img" aria-labelledby="title desc">
+  <title id="title">Quillmark, the writing lab</title>
+  <desc id="desc">A quill on a violet square alongside the Quillmark wordmark and the phrase Read between the lines.</desc>
+  <defs><linearGradient id="background"><stop stop-color="#eee0fa"/><stop offset="1" stop-color="#f7f4ec"/></linearGradient></defs>
+  <rect x="0.5" y="0.5" width="1079" height="289" rx="24" fill="url(#background)" stroke="#d4c1e2"/>
+  <g transform="translate(75 75) scale(3.5)">
+    <rect width="40" height="40" rx="11" fill="#3e2865"/>
+    <path d="M28 10c-7.8.6-14.3 5.4-14.3 11.8 0 3.9 2.9 6.6 6.5 6.6 5.4 0 8.7-4.6 8.7-10.3V10Z" fill="none" stroke="#fff8ea" stroke-width="2.2" stroke-linejoin="round"/>
+    <path d="M12 31 25.7 16.5M20 23h7.1M22.9 20v-5.3" fill="none" stroke="#dfbdff" stroke-width="1.9" stroke-linecap="round"/>
+  </g>
+  <text x="264" y="115" fill="#55377f" font-family="monospace" font-size="16" letter-spacing="3">THE WRITING LAB / HIRAM G. EDITION</text>
+  <text x="258" y="180" fill="#251d30" font-family="Georgia, serif" font-size="79" letter-spacing="-2">Quillmark</text>
+  <text x="264" y="222" fill="#5b4c6d" font-family="Arial, sans-serif" font-size="23">Read between the lines.</text>
+</svg>

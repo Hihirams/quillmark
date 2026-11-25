@@ -88,7 +88,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="Quillmark",
-    description="VirusTotal for AI slop detection",
+    description="Self-hosted writing analysis, detector evidence, and style coaching.",
     lifespan=lifespan,
 )
 
