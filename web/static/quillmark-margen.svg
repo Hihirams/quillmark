@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+  <style>
+    .lines { fill: #625ca1; }
+    .bracket { fill: #2f285a; }
+    @media (prefers-color-scheme: dark) {
+      .lines { fill: #b9ade8; }
+      .bracket { fill: #efe4ff; }
+    }
+  </style>
+  <path class="lines" d="M2 11h30v3H2zM2 19h23v3H2zM2 27h15v3H2z"/>
+  <path class="bracket" d="M29 4h9v32h-9v-3h6V7h-6z"/>
+</svg>
