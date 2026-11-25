@@ -1,20 +1,42 @@
 {% extends "base.html" %}
 {% block title %}Quillmark: AI text detector{% endblock %}
 {% block content %}
-<div class="band qm-workspace">
-<div class="qm-workspace__inner">
-<section class="qm-intro">
-    <p class="qm-eyebrow">Quillmark &nbsp;/&nbsp; Writing lab</p>
-    <h1>Read between the lines.</h1>
-    <p class="qm-intro__lead">Look for AI-writing patterns in a draft, document or web page. Quillmark gives you an overall score and shows what each engine found.</p>
-    <div class="qm-notebook">
-        <p><strong>Evidence, not a verdict.</strong> A detector cannot prove who wrote something. Read the signals alongside the original text.</p>
-        <p>Looking to revise? <a href="/coach">Open the style coach</a>.</p>
+
+<section class="lens-lead" aria-labelledby="analysis-heading">
+    <div class="lens-lead__inner">
+        <h1 id="analysis-heading">Read the signals.</h1>
+        <p>Check a text, document or web page for signs of AI writing.</p>
+        <a class="lens-start" href="#detector-workspace">Open the detector <span aria-hidden="true">&#8595;</span></a>
     </div>
+    <picture>
+        <source media="(max-width: 720px)" srcset="/static/img/lente-editor-360.webp">
+        <img class="lens-print" src="/static/img/lente-editor.webp" width="960" height="640" alt="" fetchpriority="high">
+    </picture>
+    <svg class="lens-orbits" viewBox="0 0 670 485" aria-hidden="true" focusable="false">
+        <g transform="rotate(-18 340 237)" fill="none" stroke="currentColor">
+            <ellipse cx="340" cy="237" rx="268" ry="153" class="lens-dash"/>
+            <ellipse cx="340" cy="237" rx="223" ry="130" opacity=".85"/>
+            <ellipse cx="340" cy="237" rx="176" ry="102" class="lens-dash"/>
+            <ellipse cx="340" cy="237" rx="134" ry="78" opacity=".85"/>
+            <path d="M37 237h607M340 61v353" opacity=".4"/>
+            <circle cx="116" cy="237" r="5" fill="currentColor"/>
+            <circle cx="515" cy="237" r="6" fill="currentColor"/>
+            <path d="M548 174h40v-20m-426 134h-39v22"/>
+        </g>
+        <g class="lens-core" transform="rotate(-18 340 237)" fill="#f3eeff">
+            <path d="M307 224c0-17 9-29 24-35l4 8c-9 4-13 10-14 17h14v28h-28zm37 0c0-17 9-29 24-35l4 8c-9 4-13 10-14 17h14v28h-28z"/>
+            <path d="M292 260h95v2h-95z" opacity=".6"/>
+            <text x="588" y="149" class="lens-type" fill="currentColor">01</text>
+            <text x="101" y="325" class="lens-type" fill="currentColor">02</text>
+        </g>
+    </svg>
 </section>
 
-<div class="qm-editor">
-    <div id="tool-notice" class="tool-notice" role="alert"{% if not error %} hidden{% endif %}>
+<div class="band qm-workspace">
+<div class="qm-workspace__inner">
+<section class="qm-editor" id="detector-workspace" tabindex="-1" aria-labelledby="detector-heading">
+    <h2 class="sr-only" id="detector-heading">Detector workspace</h2>
+<div id="tool-notice" class="tool-notice" role="alert"{% if not error %} hidden{% endif %}>
         <div class="st-notice st-notice--warn">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M10 9v4.5M10 6.25v.01"/></svg>
             <div id="tool-notice-text">{{ error }}</div>
@@ -22,6 +44,7 @@
     </div>
 
     <div class="st-tool">
+
         <div class="st-tabs" role="tablist" aria-label="What to analyse">
             <button type="button" class="st-tab" role="tab" id="tab-text" aria-controls="panel-text" aria-selected="true" data-tab="text">
                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" aria-hidden="true"><path d="M3 4h10M3 7h10M3 10h7M3 13h4"/></svg>Text
@@ -40,7 +63,7 @@
         <form id="analyze-form" method="post" action="/analyze" class="st-tool__body" novalidate>
             <div id="panel-text" class="tool-panel" role="tabpanel" aria-labelledby="tab-text">
                 <label for="text-input" class="sr-only">Text to analyse</label>
-                <textarea name="text" id="text-input" class="st-textarea" rows="8" placeholder="Paste the text you want to check"></textarea>
+                <textarea name="text" id="text-input" class="st-textarea" rows="8" placeholder="Paste your text here…"></textarea>
             </div>
 
             <div id="panel-document" class="tool-panel" role="tabpanel" aria-labelledby="tab-document" hidden>
@@ -50,6 +73,7 @@
                     <span class="tool-drop__types" id="upload-status" role="status" aria-live="polite">.pdf, .docx, .txt or .md, up to 10 MB</span>
                     <input type="file" id="file-input" accept=".pdf,.docx,.txt,.md" class="sr-only">
                 </label>
+                <a class="qm-document-revise" href="/coach#coach-file">Want to revise the document? Open Style coach.</a>
             </div>
 
             <div id="panel-url" class="tool-panel" role="tabpanel" aria-labelledby="tab-url" hidden>
@@ -77,7 +101,10 @@
             </div>
         </form>
     </div>
-    <p class="qm-local">Every engine runs on this server. The analysis does not send your text to external AI APIs.</p>
+    <div class="qm-editor__notes">
+        <p class="qm-local">Text is processed on this server, not sent to external AI APIs.</p>
+        <p class="qm-local"><a href="#how-heading">How scoring works</a></p>
+    </div>
 
     <section class="st-panel site-result" id="site-result" aria-live="polite" hidden>
         <p class="site-result__host" id="site-result-host"></p>
@@ -87,60 +114,83 @@
         <button type="button" class="st-btn st-btn--secondary" id="site-result-full" hidden>Run the full {{ engines|length }}-engine report on this page</button>
         <p class="site-result__note">Evidence, not a probability: finding no marker does not mean the site was built by hand.</p>
     </section>
-</div>
+</section>
 </div>
 </div>
 
-<div id="queue-overlay" class="queue-overlay" role="dialog" aria-modal="true" aria-labelledby="queue-title" hidden>
+<div id="queue-overlay" class="queue-overlay" role="dialog" aria-modal="true" aria-labelledby="queue-title" aria-describedby="queue-desc" hidden>
     <div class="queue-card">
+        <p class="lens-queue-label">Analysis queue</p>
         <h2 id="queue-title">In the queue</h2>
         <p id="queue-desc">All engines are busy. Your report opens as soon as it is your turn.</p>
         <div class="queue-progress" aria-hidden="true"><i></i></div>
-        <p class="queue-meta" id="queue-wait"></p>
-        <button type="button" class="st-btn st-btn--secondary" id="queue-cancel">Cancel</button>
+        <p class="queue-meta" id="queue-wait" role="status"></p>
+        <div class="qm-dialog__footer">
+            <button type="button" class="st-btn st-btn--secondary" id="queue-cancel">Cancel</button>
+        </div>
     </div>
 </div>
 
-<section class="measure section" aria-labelledby="how-heading">
-    <p class="qm-eyebrow qm-section-index">01 / Method</p><div class="section-head"><h2 id="how-heading">How it works</h2></div>
-    <div class="home-how">
-        <div>
-            <h3>{{ engines|length }} engines read the text</h3>
-            <p>Neural classifiers trained on AI text, statistical tests that measure how predictable each word is, and checks for the phrasing AI models overuse.</p>
+<nav class="lens-atlas-index" aria-label="Reading guide">
+    <span>Reading guide</span>
+    <a href="#how-heading"><span aria-hidden="true">01 /</span> The method</a>
+    <a href="#score-heading"><span aria-hidden="true">02 /</span> The scale</a>
+    <a href="#engines-heading"><span aria-hidden="true">03 /</span> Engine index</a>
+</nav>
+
+<section class="measure section qm-method lens-atlas" aria-labelledby="how-heading">
+    <div class="lens-atlas-copy">
+        <div class="section-head">
+            <span class="lens-folio" aria-hidden="true">01 / THE METHOD</span>
+            <h2 id="how-heading">How scoring works</h2>
+            <p>A detector cannot prove who wrote something. Use the signals alongside the original text.</p>
         </div>
-        <div>
-            <h3>One calibrated score</h3>
-            <p>The engines' votes are combined by a model fitted on SlopBench, so a score of {{ bands[2]|int }} means the same thing in every report: fewer than 2 in 100 human texts score that high.</p>
-        </div>
-        <div>
-            <h3>Every vote shown</h3>
-            <p>You see each engine's score next to the total. When the engines disagree, the report says so.</p>
-        </div>
+        <ol class="lens-method-steps">
+            <li><h3>{{ engines|length }} engines read the text</h3><p>Neural classifiers, statistical tests of word predictability and checks for recurring phrasing look at different signals.</p></li>
+            <li><h3>One calibrated score</h3><p>The votes are combined by a model fitted on SlopBench. Fewer than 2 in 100 human texts in the benchmark score {{ bands[2]|int }} or higher.</p></li>
+            <li><h3>Every vote shown</h3><p>The report shows each engine's score and tells you when the engines disagree.</p></li>
+        </ol>
     </div>
+    <figure class="lens-plate">
+        <div class="lens-plate-art" aria-hidden="true">
+            <img class="lens-atlas-photo" src="/static/img/lente-atlas.webp" width="1200" height="600" loading="lazy" decoding="async" alt="">
+        </div>
+        <figcaption><span>Fig. 01 / Multiple readings</span><span aria-hidden="true">+</span></figcaption>
+    </figure>
 </section>
 
-<section class="measure section" aria-labelledby="score-heading">
-    <div class="section-head">
-        <p class="qm-eyebrow qm-section-index">02 / Interpretation</p><h2 id="score-heading">Reading the score</h2>
-        <p>The bands are placed by how often human-written text reaches them, so a high score is rare for a person's writing.</p>
+<section class="measure section lens-atlas lens-atlas--reverse" aria-labelledby="score-heading">
+    <div class="lens-atlas-copy">
+        <div class="section-head">
+            <span class="lens-folio" aria-hidden="true">02 / THE SCALE</span>
+            <h2 id="score-heading">Reading the scale</h2>
+            <p>The bands reflect how often human-written text reached each interval in the evaluation. The score is not a probability of AI authorship.</p>
+        </div>
+        <ul class="bands" role="list">
+            {% set edges = [0] + bands + [100] %}
+            {% for b in band_info %}
+            <li>
+                <span class="bands__range">{{ edges[loop.index0]|int }}&ndash;{{ edges[loop.index]|int }}</span>
+                <div>
+                    <span class="st-verdict st-verdict--{{ b.key }}">{{ b.label }}</span>
+                    <p>{{ b.desc }}</p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
-    <ul class="bands" role="list">
-        {% set edges = [0] + bands + [100] %}
-        {% for b in band_info %}
-        <li>
-            <span class="bands__range">{{ edges[loop.index0]|int }}&ndash;{{ edges[loop.index]|int }}</span>
-            <div>
-                <span class="st-verdict st-verdict--{{ b.key }}">{{ b.label }}</span>
-                <p>{{ b.desc }}</p>
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
+    <figure class="lens-plate lens-plate--right">
+        <div class="lens-plate-art" aria-hidden="true">
+            <img class="lens-atlas-photo" src="/static/img/lente-atlas.webp" width="1200" height="600" loading="lazy" decoding="async" alt="">
+        </div>
+        <figcaption><span>Fig. 02 / Evidence in context</span><span aria-hidden="true">+</span></figcaption>
+    </figure>
 </section>
 
 <section class="measure section" aria-labelledby="engines-heading">
     <div class="section-head">
-        <p class="qm-eyebrow qm-section-index">03 / Breakdown</p><h2 id="engines-heading">The engines</h2>
+        <span class="lens-folio" aria-hidden="true">03 / ENGINE INDEX</span>
+        <h2 id="engines-heading">Detection engines</h2>
         <p>Each engine uses a different method. Some carry weight in the score, all are shown in every report.</p>
     </div>
     <div class="st-panel st-panel--flush">

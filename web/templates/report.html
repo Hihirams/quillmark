@@ -1,76 +1,123 @@
 {% extends "base.html" %}
-{% block title %}Report {{ report.id }}: Quillmark{% endblock %}
-{% block meta_description %}AI detection report {{ report.id }}, analysed with {{ report.engines_total }} engines.{% endblock %}
+{% block title %}Review scan {{ report.id }} | Quillmark{% endblock %}
+{% block meta_description %}Review the text and engine evidence for Quillmark scan {{ report.id }}.{% endblock %}
 {% block content %}
-<div class="band report-band">
-    <div class="measure">
-        <div class="report-head">
-            <div>
-                <p class="qm-eyebrow report-head__kicker">Quillmark &nbsp;/&nbsp; Analysis record</p>
-                <h1>Report</h1>
-                <p class="report-status" aria-live="polite">
-                    <span class="report-status__dot is-live" id="status-dot" aria-hidden="true"></span>
-                    <span id="status-label">Scanning&hellip;</span>
-                    <span>&middot; <span id="report-date" data-created="{{ report.created_at.isoformat() }}"></span></span>
-                </p>
+<article class="qm-report" aria-labelledby="report-heading">
+    <header class="qm-report__header">
+        <div>
+            <div class="qm-report__path"><a href="/">Detector</a><span aria-hidden="true">/</span><span>Report {{ report.id|upper }}</span></div>
+            <h1 id="report-heading">Review scan</h1>
+        </div>
+        <div class="qm-report__actions" aria-label="Report actions" role="group">
+            <button type="button" class="st-btn st-btn--secondary" id="copy-btn">Copy link</button>
+            <a class="st-btn st-btn--secondary" href="/api/report/{{ report.id }}" download="quillmark-{{ report.id }}.json">Download JSON</a>
+            <a href="/" class="st-btn st-btn--primary">New scan</a>
+        </div>
+    </header>
+
+    <div class="qm-report__context">
+        <p class="report-status" aria-live="polite">
+            <span class="report-status__dot is-live" id="status-dot" aria-hidden="true"></span>
+            <span id="status-label">Scanning&hellip;</span>
+        </p>
+        <ul aria-label="Scan details">
+            <li><time id="report-date" datetime="{{ report.created_at.isoformat() }}" data-created="{{ report.created_at.isoformat() }}"></time></li>
+            <li>{{ "{:,}".format(report.word_count) }} word{{ "" if report.word_count == 1 else "s" }}</li>
+            {% if report.language != "other" %}<li>Language: <b>{{ report.language }}</b></li>{% endif %}
+            {% if report.source_type == "url" %}<li class="qm-report__source">{{ report.source }}</li>{% else %}<li>Pasted text</li>{% endif %}
+        </ul>
+    </div>
+
+    <div class="qm-report__proof">
+        <section class="qm-report__overview" id="overview" aria-labelledby="finding-heading">
+            <svg class="lens-report-mark" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.35" aria-hidden="true" focusable="false">
+                <circle cx="18" cy="18" r="14"/><path d="M6 18h24M18 6v24" opacity=".45"/>
+                <path d="M11 20h4l2-6 3 9 2-5h4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="st-readout">
+                <h2 id="finding-heading">Overall score</h2>
+                <div class="st-readout__head">
+                    <div class="st-readout__score">
+                        <span class="st-readout__value" id="score-value">&ndash;</span>
+                        <span class="st-readout__max">/ 100</span>
+                    </div>
+                    <span class="st-verdict" id="verdict" hidden></span>
+                </div>
+                <div class="st-scale" id="scale" style="--score: 0" aria-hidden="true">
+                    <div class="st-scale__track">
+                        <span class="st-scale__band st-scale__band--clean"></span>
+                        <span class="st-scale__band st-scale__band--low"></span>
+                        <span class="st-scale__band st-scale__band--suspicious"></span>
+                        <span class="st-scale__band st-scale__band--likely"></span>
+                        <span class="st-scale__band st-scale__band--slop"></span>
+                        <span class="st-scale__marker"></span>
+                    </div>
+                    <div class="st-scale__ticks">
+                        <span style="inset-inline-start: 0%">0</span>
+                        {% for b in bands %}<span style="inset-inline-start: {{ b }}%">{{ b|int }}</span>{% endfor %}
+                        <span style="inset-inline-start: 100%">100</span>
+                    </div>
+                </div>
+                <p class="st-readout__summary" id="summary">0 of {{ report.engines_total }} engines finished.</p>
             </div>
-            <div class="report-head__actions">
-                <button type="button" class="st-btn st-btn--secondary" id="copy-btn">Copy link</button>
-                <a class="st-btn st-btn--ghost" href="/api/report/{{ report.id }}" download="quillmark-{{ report.id }}.json">Download JSON</a>
-                <a href="/" class="st-btn st-btn--primary">New scan</a>
-            </div>
+            <p class="qm-report__caveat">Use this score to decide what to review. It does not establish authorship.</p>
+        </section>
+        <div class="qm-report__excerpt" id="excerpt">
+            <details class="report-text" open>
+                <summary>
+                    <span>Analysed text</span>
+                    <span class="qm-report__chevron" aria-hidden="true"></span>
+                </summary>
+                <div class="report-text__body" tabindex="0" role="region" aria-label="Analysed text preview">{{ report.text_excerpt }}</div>
+            </details>
+            <p class="qm-report__key"><span aria-hidden="true"></span> Underlined phrases show patterns flagged by Linguistic Markers.</p>
         </div>
     </div>
-</div>
-
-<div class="measure report">
-    <section class="st-panel">
-        <div class="st-readout">
-            <div class="st-readout__head">
-                <div class="st-readout__score">
-                    <span class="st-readout__value" id="score-value">…</span>
-                    <span class="st-readout__max">/ 100</span>
-                </div>
-                <span class="st-verdict" id="verdict" hidden></span>
-            </div>
-            <div class="st-scale" id="scale" style="--score: 0" aria-hidden="true">
-                <div class="st-scale__track">
-                    <span class="st-scale__band st-scale__band--clean"></span>
-                    <span class="st-scale__band st-scale__band--low"></span>
-                    <span class="st-scale__band st-scale__band--suspicious"></span>
-                    <span class="st-scale__band st-scale__band--likely"></span>
-                    <span class="st-scale__band st-scale__band--slop"></span>
-                    <span class="st-scale__marker"></span>
-                </div>
-                <div class="st-scale__ticks">
-                    <span style="inset-inline-start: 0%">0</span>
-                    {% for b in bands %}<span style="inset-inline-start: {{ b }}%">{{ b|int }}</span>{% endfor %}
-                    <span style="inset-inline-start: 100%">100</span>
-                </div>
-            </div>
-            <p class="st-readout__summary" id="summary">0 of {{ report.engines_total }} engines finished.</p>
-            <ul class="st-readout__facts">
-                <li><b>{{ "{:,}".format(report.word_count) }}</b> word{{ "" if report.word_count == 1 else "s" }}</li>
-                {% if report.source_type == "url" %}<li class="report-source">{{ report.source }}</li>{% else %}<li>Pasted text</li>{% endif %}
-                {% if report.language != "other" %}
-                <li>Language: <b>{{ report.language }}</b></li>
-                {% endif %}
-            </ul>
-        </div>
-    </section>
 
     {% if notes %}
-    <div class="report-notes">
-        {% for note in notes %}
-        <div class="st-notice st-notice--warn">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M10 9v4.5M10 6.25v.01"/></svg>
-            <div>{{ note }}</div>
-        </div>
-        {% endfor %}
-    </div>
+    <details class="qm-report__disclosure qm-report__notes">
+        <summary><span>Scan limitations</span><span class="qm-report__count">{{ notes|length }}</span><span class="qm-report__chevron" aria-hidden="true"></span></summary>
+        <ul>{% for note in notes %}<li>{{ note }}</li>{% endfor %}</ul>
+    </details>
     {% endif %}
 
-    <section class="st-panel feedback" id="feedback" aria-labelledby="feedback-title" hidden>
+    {% if report.source_type == "url" %}
+    <section class="qm-report__section site-result" id="site-check" data-url="{{ report.source }}" aria-labelledby="site-heading" hidden>
+        <h2 id="site-heading">Website builder evidence</h2>
+        <p class="site-result__verdict" id="site-verdict"></p>
+        <ul class="site-result__evidence" id="site-evidence"></ul>
+        <p class="site-result__note">No marker found does not mean the site was built by hand.</p>
+    </section>
+    {% endif %}
+
+    <details class="qm-report__disclosure qm-report__ledger">
+        <summary id="breakdown-heading"><span>Engine results</span><span class="qm-report__count"><span id="progress">0 / {{ report.engines_total }}</span> scored</span><span class="qm-report__chevron" aria-hidden="true"></span></summary>
+        <table class="st-engines" aria-labelledby="breakdown-heading">
+            <thead>
+                <tr>
+                    <th scope="col">Engine</th>
+                    <th scope="col" class="st-engine__family">Method</th>
+                    <th scope="col" class="qm-report__indicator">Score bar</th>
+                    <th scope="col">Score</th>
+                </tr>
+            </thead>
+            <tbody id="engine-rows">
+                {% for eng in engines %}
+                <tr id="row-{{ eng.key }}" data-score="-1">
+                    <td>
+                        {% if eng.url %}<a class="st-engine__name report-engine-link" href="{{ eng.url }}" target="_blank" rel="noopener noreferrer">{{ eng.name }}</a>{% else %}<span class="st-engine__name">{{ eng.name }}</span>{% endif %}
+                        <span class="st-engine__model">{{ eng.description }}</span>
+                    </td>
+                    <td class="st-engine__family">{{ eng.engine_type }}</td>
+                    <td class="qm-report__indicator"><span class="st-engine__bar" id="bar-{{ eng.key }}" style="--v: 0" aria-hidden="true"><i></i></span></td>
+                    <td class="st-engine__score st-engine__pending" id="score-{{ eng.key }}">Waiting</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </details>
+
+    <section class="qm-report__feedback feedback" id="feedback" aria-labelledby="feedback-title" hidden>
         <h2 class="feedback__title" id="feedback-title">Who actually wrote this text?</h2>
         <p class="feedback__body">Your answer is saved on this server with the engine scores, never with your text, and shows where the engines go wrong.</p>
         <div class="feedback__row">
@@ -81,58 +128,7 @@
         </div>
         <p class="feedback__body" id="feedback-status" aria-live="polite"></p>
     </section>
-
-    {% if report.source_type == "url" %}
-    <section class="st-panel site-result" id="site-check" data-url="{{ report.source }}" aria-labelledby="site-heading" hidden>
-        <h2 class="report-section__title" id="site-heading">Website builder</h2>
-        <p class="site-result__verdict" id="site-verdict"></p>
-        <ul class="site-result__evidence" id="site-evidence"></ul>
-        <p class="site-result__note">Evidence, not a probability: finding no marker does not mean the site was built by hand.</p>
-    </section>
-    {% endif %}
-
-    <section class="report-section" aria-labelledby="breakdown-heading">
-        <div class="report-section__head">
-            <h2 id="breakdown-heading">Every engine's score</h2>
-            <span class="report-section__count" id="progress">0 / {{ report.engines_total }}</span>
-        </div>
-        <div class="st-panel st-panel--flush">
-            <table class="st-engines">
-                <thead>
-                    <tr>
-                        <th scope="col">Engine</th>
-                        <th scope="col" class="st-engine__family">Method</th>
-                        <th scope="col">AI likelihood</th>
-                        <th scope="col" style="text-align: end">Score</th>
-                    </tr>
-                </thead>
-                <tbody id="engine-rows">
-                    {% for eng in engines %}
-                    <tr id="row-{{ eng.key }}" data-score="-1">
-                        <td>
-                            {% if eng.url %}<a class="st-engine__name report-engine-link" href="{{ eng.url }}" target="_blank" rel="noopener noreferrer">{{ eng.name }}</a>{% else %}<span class="st-engine__name">{{ eng.name }}</span>{% endif %}
-                            <span class="st-engine__model">{{ eng.description }}</span>
-                        </td>
-                        <td class="st-engine__family">{{ eng.engine_type }}</td>
-                        <td style="width: 38%"><span class="st-engine__bar" id="bar-{{ eng.key }}" style="--v: 0"><i></i></span></td>
-                        <td class="st-engine__score st-engine__pending" id="score-{{ eng.key }}">Waiting</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <section class="report-section">
-        <details class="report-text">
-            <summary>
-                <h2>The analysed text</h2>
-                <span class="report-section__count">{{ "{:,}".format(report.word_count) }} words</span>
-            </summary>
-            <div class="report-text__body">{{ report.text_excerpt }}</div>
-        </details>
-    </section>
-</div>
+</article>
 
 <div id="report-data" hidden
      data-report-id="{{ report.id }}"

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}API reference: Quillmark{% endblock %}
+{% block meta_description %}Browse and try Quillmark's local API operations, or download the OpenAPI schema.{% endblock %}
+{% block content %}
+<div class="qm-secondary qm-api-docs">
+    <header class="qm-secondary__head">
+        <svg class="lens-api-mark" viewBox="0 0 114 65" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true" focusable="false">
+            <ellipse cx="57" cy="32" rx="54" ry="22" transform="rotate(-15 57 32)" stroke-dasharray="2 5"/>
+            <path d="m48 23-11 9 11 9m18-18 11 9-11 9m-4-20-10 23" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="21" cy="46" r="3" fill="currentColor"/>
+        </svg>
+        <div>
+            <h1>API reference</h1>
+            <p>Explore and test endpoints on this Quillmark instance.</p>
+        </div>
+        <a class="qm-secondary__link" href="{{ openapi_url }}">OpenAPI JSON <span aria-hidden="true">&#8599;</span></a>
+    </header>
+    <div class="qm-api-layout">
+        <nav class="qm-api-groups" aria-label="Endpoint groups">
+            <p>Jump to</p>
+            <a href="#api-endpoints-title">All endpoints</a>
+            <a href="#operations-tag-Analysis">Analysis</a>
+            <a href="#operations-tag-Reports">Reports</a>
+            <a href="#operations-tag-Engines">Engines</a>
+            <a href="#operations-tag-Queue">Queue</a>
+        </nav>
+        <section class="qm-api-reference" aria-labelledby="api-endpoints-title">
+            <header class="qm-pane-head">
+                <h2 id="api-endpoints-title">Endpoints</h2>
+                <span>Expand a route to try it</span>
+            </header>
+            <p class="qm-api-fallback" id="swagger-fallback">
+                The interactive explorer needs the Swagger UI assets to load. The
+                <a href="{{ openapi_url }}">OpenAPI schema</a> is available without them.
+            </p>
+            <div id="swagger-ui" data-openapi-url="{{ openapi_url }}"
+                 data-oauth-redirect="{{ oauth2_redirect_url }}"></div>
+        </section>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css">
+<script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js" defer></script>
+<script src="/static/js/api-docs.js" defer></script>
+{% endblock %}

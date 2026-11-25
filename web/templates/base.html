@@ -5,32 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Quillmark{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}Self-hosted AI text detector. {{ engine_count }} open detection engines run on this server; nothing is sent to third parties.{% endblock %}">
-    <meta name="theme-color" content="#f7f4ec" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#171322" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#101010" media="(prefers-color-scheme: dark)">
     <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
     <meta name="robots" content="noindex">
-    <link rel="preload" href="/static/fonts/ibm-plex-sans.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="/static/fonts/newsreader.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="/static/fonts/fonts.css">
     <link rel="stylesheet" href="/static/css/tokens.css">
     <link rel="stylesheet" href="/static/css/system.css">
     <link rel="stylesheet" href="/static/css/app.css">
     <link rel="stylesheet" href="/static/css/quillmark.css">
+    <link rel="stylesheet" href="/static/css/quillmark-shell.css">
+    <link rel="stylesheet" href="/static/css/quillmark-secondary.css">
+    <link rel="stylesheet" href="/static/css/quillmark-report.css">
+    <link rel="stylesheet" href="/static/css/quillmark-lens.css">
 </head>
 <body class="st-root">
+    <svg class="lens-palette-def" xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" focusable="false">
+        <defs>
+            <filter id="lens-violet-print" color-interpolation-filters="sRGB">
+                <feColorMatrix type="saturate" values="0"/>
+                <feComponentTransfer>
+                    <feFuncR type="table" tableValues="0 .13 .35 .69 1"/>
+                    <feFuncG type="table" tableValues="0 .05 .19 .56 1"/>
+                    <feFuncB type="table" tableValues="0 .24 .60 .92 1"/>
+                </feComponentTransfer>
+            </filter>
+        </defs>
+    </svg>
     <a class="qm-skip" href="#main-content">Skip to content</a>
-    <header class="st-header">
+    <header class="st-header qm-rail">
         <div class="st-header__inner">
             <a href="/" class="st-logo" aria-label="Quillmark home">
-                <img src="/static/quillmark-margen.svg" alt="" width="40" height="40">
-                <span class="st-logo__word">Quillmark</span>
+                <span class="st-logo__word qm-firma" aria-hidden="true">
+                    <svg class="qm-firma__q" viewBox="0 0 34 36" focusable="false" aria-hidden="true">
+                        <path fill="currentColor" fill-rule="evenodd" d="M16 2a15 15 0 1 0 0 30 15 15 0 0 0 0-30Zm0 4.2a10.8 10.8 0 1 1 0 21.6 10.8 10.8 0 0 1 0-21.6Z"/>
+                        <path fill="currentColor" d="M18 28c4.5.5 6.7 4.3 11.4 4.3 1.6 0 3-.5 4.3-1.4-1.8 3-3.9 4-6.5 4-5.3 0-8.5-4.1-12.8-4.7Z"/>
+                    </svg><span>uillmark</span>
+                </span>
             </a>
-            <nav class="st-header__nav" aria-label="Main">
-                <a href="/"{% if request.url.path == "/" %} aria-current="page"{% endif %}>Detector</a>
-                <a href="/coach"{% if request.url.path == "/coach" %} aria-current="page"{% endif %}>Style coach</a>
-                <a href="/docs">API</a>
-                <a href="https://github.com/Hihirams/quillmark" class="hide-sm">GitHub</a>
+            <nav class="st-header__nav" aria-label="Workspace">
+                <a href="/"{% if request.url.path == "/" or request.url.path.startswith("/report/") %} aria-current="page"{% endif %}><span aria-hidden="true">01</span> Detector</a>
+                <a href="/coach"{% if request.url.path == "/coach" %} aria-current="page"{% endif %}><span aria-hidden="true">02</span> Style coach</a>
+                <a href="/docs"{% if request.url.path == "/docs" %} aria-current="page"{% endif %}><span aria-hidden="true">03</span> API</a>
             </nav>
+            <div class="qm-rail__foot"><a href="https://github.com/Hihirams/quillmark">Source code</a></div>
         </div>
     </header>
     <main id="main-content" tabindex="-1">

@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import mimetypes
 import os
 from contextlib import asynccontextmanager
 
@@ -14,8 +15,10 @@ import torch
 torch.set_num_threads(int(os.getenv("SLOPTOTAL_TORCH_THREADS", "1")))
 torch.set_num_interop_threads(1)
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.docs import get_swagger_ui_oauth2_redirect_html
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -90,6 +93,7 @@ app = FastAPI(
     title="Quillmark",
     description="Self-hosted writing analysis, detector evidence, and style coaching.",
     lifespan=lifespan,
+    docs_url=None,
 )
 
 app.add_middleware(
@@ -100,6 +104,8 @@ app.add_middleware(
 )
 app.add_middleware(DirectQuotaMiddleware)
 
+# Windows can lack the WebP registry entry.
+mimetypes.add_type("image/webp", ".webp")
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 app.state.templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 app.state.queue_manager = None  # set in lifespan
@@ -108,6 +114,27 @@ app.state.queue_manager = None  # set in lifespan
 app.include_router(web_router)
 app.include_router(api_router)
 app.include_router(queue_router)
+
+
+SWAGGER_OAUTH_REDIRECT = "/docs/oauth2-redirect"
+
+
+@app.get("/docs", response_class=HTMLResponse, include_in_schema=False)
+async def api_reference(request: Request):
+    root_path = request.scope.get("root_path", "").rstrip("/")
+    return request.app.state.templates.TemplateResponse(
+        request,
+        "api_docs.html",
+        {
+            "openapi_url": root_path + (request.app.openapi_url or "/openapi.json"),
+            "oauth2_redirect_url": root_path + SWAGGER_OAUTH_REDIRECT,
+        },
+    )
+
+
+@app.get(SWAGGER_OAUTH_REDIRECT, response_class=HTMLResponse, include_in_schema=False)
+async def swagger_oauth_redirect():
+    return get_swagger_ui_oauth2_redirect_html()
 
 
 async def _retention_loop():
